@@ -1,6 +1,8 @@
 var apiKey = 'Insira_a_sua_Api_Key';
 var email = 'Insira_seu_email'
 
+//Versão: 1.0.0
+
 function eventosDeHoje() {
   var hoje = new Date();
   var inicioDoDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
