@@ -1,5 +1,5 @@
 const apiKey = 'Insira_a_sua_Api_Key';
-//Versão: 1.1.0
+//Versão: 1.1.1
 
 const email = Session.getActiveUser().getEmail();
 
@@ -37,15 +37,19 @@ function eventosDeHoje() {
 
       var convidados = evento.getGuestList(true);
 
+      var aceite = false;
       for (var j = 0; j < convidados.length; j++) {
         var convidado = convidados[j];
         if (convidado.getEmail() == email) {
-          if (convidado.getGuestStatus() == CalendarApp.GuestStatus.YES){
-            timeEntry(evento.getTitle(), startTimeFormatted, endTimeFormatted, idDoProjeto, tags)
-          }
+          if (convidado.getGuestStatus() == CalendarApp.GuestStatus.YES)
+            aceite = true;
           j = convidados.length;
         }
       }
+
+      if (idDoProjeto && (aceite || convidados.length == 0))
+        timeEntry(evento.getTitle(), startTimeFormatted, endTimeFormatted, idDoProjeto, tags)
+
 
     }
   }
