@@ -1,7 +1,7 @@
-var apiKey = 'Insira_a_sua_Api_Key';
-var email = 'Insira_seu_email'
+const apiKey = 'Insira_a_sua_Api_Key';
+const email = 'Insira_seu_email'
 
-//Versão: 1.0.0
+//Versão: 1.1.0
 
 function eventosDeHoje() {
   var hoje = new Date();
@@ -26,20 +26,27 @@ function eventosDeHoje() {
       var startTimeFormatted = Utilities.formatDate(evento.getStartTime(), 'GMT', "yyyy-MM-dd'T'HH:mm:ss'Z'");
       var endTimeFormatted = Utilities.formatDate(evento.getEndTime(), 'GMT', "yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-      var idDoProjeto = obterIdDoProjeto(tituloProjeto.replace(" ","%20"), evento.getTitle())
+      var idDoProjeto = obterIdDoProjeto(tituloProjeto.replaceAll(" ","%20"), evento.getTitle())
 
       // Extrair as tags
       var tags = [];
       for (var j = 1; j < linhas.length; j++) {
         var tag = linhas[j].substring(1).trim();
-        if (tag != "backoffice")
-          tags.push(obterIdDaTag(tag, evento.getTitle()));
-        else
-          timeEntry(evento.getTitle()+" - Backoffice", startTimeFormatted, endTimeFormatted, idDoProjeto)
+        tags.push(obterIdDaTag(tag, evento.getTitle()));
       }
 
-      if (tags.length > 0)
-        timeEntry(evento.getTitle(), startTimeFormatted, endTimeFormatted, idDoProjeto, tags)
+      var convidados = evento.getGuestList(true);
+
+      for (var j = 0; j < convidados.length; j++) {
+        var convidado = convidados[j];
+        if (convidado.getEmail() == email) {
+          if (convidado.getGuestStatus() == CalendarApp.GuestStatus.YES){
+            timeEntry(evento.getTitle(), startTimeFormatted, endTimeFormatted, idDoProjeto, tags)
+          }
+          j = convidados.length;
+        }
+      }
+
     }
   }
 
