@@ -1,7 +1,7 @@
 const apiKey = 'Insira_a_sua_Api_Key';
-const email = 'Insira_seu_email'
-
 //Versão: 1.1.0
+
+const email = Session.getActiveUser().getEmail();
 
 function eventosDeHoje() {
   var hoje = new Date();
