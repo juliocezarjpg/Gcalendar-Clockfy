@@ -1,5 +1,5 @@
 const apiKey = 'Insira_a_sua_Api_Key';
-//Versão: 1.1.1
+//Versão: 1.1.2
 
 const email = Session.getActiveUser().getEmail();
 
@@ -19,6 +19,7 @@ function eventosDeHoje() {
 
       var descricao = evento.getDescription();
       var linhas = descricao.split('\n');
+      var linhas = descricao.split('<br>');
 
       // Extrair o título do projeto
       var tituloProjeto = linhas[0].substring(2).trim();
@@ -31,8 +32,10 @@ function eventosDeHoje() {
       // Extrair as tags
       var tags = [];
       for (var j = 1; j < linhas.length; j++) {
-        var tag = linhas[j].substring(1).trim();
-        tags.push(obterIdDaTag(tag, evento.getTitle()));
+        if (linhas[j][0] == "#"){
+          tags.push(obterIdDaTag(tag, evento.getTitle()));
+          var tag = linhas[j].substring(1).trim();
+        }
       }
 
       var convidados = evento.getGuestList(true);
