@@ -1,5 +1,5 @@
 const apiKey = 'Insira_a_sua_Api_Key';
-//Versão: 1.1.2
+//Versão: 1.1.3
 
 const email = Session.getActiveUser().getEmail();
 
@@ -10,16 +10,15 @@ function eventosDeHoje() {
 
   var eventos = CalendarApp.getEvents(inicioDoDia, fimDoDia);
 
-  //Logger.log('Eventos de Hoje:');
   for (var i = 0; i < eventos.length; i++) {
     var evento = eventos[i];
 
     if (evento.getDescription() && evento.getDescription().startsWith("##")) {
-      //Logger.log('Descrição: ' + evento.getTitle());
 
       var descricao = evento.getDescription();
+      descricao = descricao.replaceAll("<br>","\n")
+
       var linhas = descricao.split('\n');
-      var linhas = descricao.split('<br>');
 
       // Extrair o título do projeto
       var tituloProjeto = linhas[0].substring(2).trim();
@@ -33,8 +32,8 @@ function eventosDeHoje() {
       var tags = [];
       for (var j = 1; j < linhas.length; j++) {
         if (linhas[j][0] == "#"){
-          tags.push(obterIdDaTag(tag, evento.getTitle()));
           var tag = linhas[j].substring(1).trim();
+          tags.push(obterIdDaTag(tag, evento.getTitle()));
         }
       }
 
@@ -52,7 +51,6 @@ function eventosDeHoje() {
 
       if (idDoProjeto && (aceite || convidados.length == 0))
         timeEntry(evento.getTitle(), startTimeFormatted, endTimeFormatted, idDoProjeto, tags)
-
 
     }
   }
